@@ -44,8 +44,8 @@ fun MainScreen(
     val patientWeight by viewModel.patientWeight.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
 
-    // Force recompose for countdown timers
-    val tick by remember { derivedStateOf { uiState.tick } }
+    // Tick from ViewModel drives recomposition of all timers every second
+    val tick = uiState.tick
 
     LaunchedEffect(uiState.message) {
         uiState.message?.let {
@@ -60,7 +60,7 @@ fun MainScreen(
             TopAppBar(
                 title = {
                     Column {
-                        Text("AnestesIA", fontWeight = FontWeight.ExtraBold,
+                        Text("AnesteFlow", fontWeight = FontWeight.ExtraBold,
                             fontSize = 20.sp, color = AstmColors.OnSurface)
                         Text(
                             if (patientWeight > 0) "Paciente: ${patientWeight} kg"
@@ -211,13 +211,16 @@ private fun SectionHeader(title: String, count: Int) {
 @Composable
 private fun ActiveTimerCard(
     timer: ActiveTimer,
-    tick: Long,
+    tick: Long,      // consumed here to force recomposition every second
     onStop: () -> Unit
 ) {
-    val remainingMs = timer.remainingMs
-    val progress = timer.progressFraction
-    val isCritical = timer.isCritical
-    val isWarning = timer.isWarning
+    // Recompute live from current wall clock — tick triggers recomposition
+    val nowMs = tick.takeIf { it > 0L } ?: System.currentTimeMillis()
+    val elapsedMs = nowMs - timer.administeredAtMs
+    val remainingMs = maxOf(0L, timer.reinjectionTimeMs - elapsedMs)
+    val progress = (elapsedMs.toFloat() / timer.reinjectionTimeMs).coerceIn(0f, 1f)
+    val isCritical = progress >= 1.0f
+    val isWarning = progress >= 0.80f && !isCritical
 
     val cardBorderColor by animateColorAsState(
         targetValue = when {
@@ -250,7 +253,7 @@ private fun ActiveTimerCard(
                     isWarning -> AstmColors.Warning
                     else -> categoryColor
                 },
-                size = 80
+                size = 100
             )
             Spacer(Modifier.width(16.dp))
             Column(modifier = Modifier.weight(1f)) {
@@ -270,29 +273,22 @@ private fun ActiveTimerCard(
                 }
                 Spacer(Modifier.height(4.dp))
                 Text(
-                    "${String.format("%.2f", timer.calculatedVolumeMl)} ml · ${timer.patientWeightKg} kg",
+                    "${String.format("%.2f", timer.calculatedVolumeMl)} ml administrado",
                     style = MaterialTheme.typography.bodySmall,
                     color = AstmColors.OnSurfaceVariant
                 )
-                if (timer.antidote.isNotBlank() && timer.antidote != "N/A") {
-                    Text(
-                        "💊 ${timer.antidote}",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = AstmColors.Safe,
-                        fontWeight = FontWeight.SemiBold
-                    )
                 }
                 when {
-                    isCritical -> {
-                        Text("⚠️ REQUIERE REINYECCIÓN",
-                            style = MaterialTheme.typography.labelMedium,
-                            color = AstmColors.Critical, fontWeight = FontWeight.ExtraBold)
-                    }
-                    isWarning -> {
-                        Text("⚡ Ventana cerrando",
-                            style = MaterialTheme.typography.labelMedium,
-                            color = AstmColors.Warning, fontWeight = FontWeight.Bold)
-                    }
+                    isCritical -> Text(
+                        "⚠️ REQUIERE REINYECCIÓN",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = AstmColors.Critical, fontWeight = FontWeight.ExtraBold
+                    )
+                    isWarning -> Text(
+                        "⚡ Ventana cerrando",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = AstmColors.Warning, fontWeight = FontWeight.Bold
+                    )
                 }
             }
             IconButton(onClick = onStop, modifier = Modifier.size(48.dp)) {
@@ -355,7 +351,7 @@ private fun CircularTimer(
         Text(
             text = timeText,
             style = MaterialTheme.typography.labelSmall,
-            fontSize = if (hours > 0) 8.sp else 10.sp,
+            fontSize = if (hours > 0) 11.sp else 14.sp,
             fontWeight = FontWeight.Bold,
             color = color,
             textAlign = TextAlign.Center

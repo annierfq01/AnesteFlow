@@ -122,7 +122,7 @@ fun AboutScreen(onNavigateBack: () -> Unit) {
             // ── App name & version ────────────────────────────────────────────
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
-                    text = "AnestesIA",
+                    text = "AnesteFlow",
                     fontSize = 32.sp,
                     fontWeight = FontWeight.ExtraBold,
                     color = AstmColors.OnSurface,
@@ -234,6 +234,98 @@ fun AboutScreen(onNavigateBack: () -> Unit) {
                 }
             }
 
+
+            // ── Collaborator card ─────────────────────────────────────────────
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(containerColor = AstmColors.Surface),
+                border = BorderStroke(1.dp, AstmColors.CardBorder),
+                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+                shape = RoundedCornerShape(16.dp)
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Text(
+                        "COLABORADORA CLÍNICA",
+                        style = MaterialTheme.typography.labelSmall,
+                        fontWeight = FontWeight.ExtraBold,
+                        color = AstmColors.OnSurfaceVariant,
+                        letterSpacing = 1.5.sp
+                    )
+
+                    // Avatar con iniciales
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .size(64.dp)
+                            .clip(CircleShape)
+                            .background(
+                                Brush.linearGradient(
+                                    colors = listOf(Color(0xFF00838F), Color(0xFF006064))
+                                )
+                            )
+                    ) {
+                        Text(
+                            text = "LB",
+                            fontSize = 22.sp,
+                            fontWeight = FontWeight.ExtraBold,
+                            color = Color.White
+                        )
+                    }
+
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(
+                            text = "Lisannia Virgen Beritán Yero",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = AstmColors.OnSurface,
+                            textAlign = TextAlign.Center
+                        )
+                        Spacer(Modifier.height(2.dp))
+                        Text(
+                            text = "Residente de Anestesiología y Reanimación",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = AstmColors.OnSurfaceVariant,
+                            fontStyle = FontStyle.Italic,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+
+                    HorizontalDivider(color = AstmColors.CardBorder)
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.LocalHospital,
+                            contentDescription = null,
+                            tint = Color(0xFF006064),
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Spacer(Modifier.width(8.dp))
+                        Column {
+                            Text(
+                                text = "Hospital General Provincial",
+                                fontWeight = FontWeight.SemiBold,
+                                color = AstmColors.OnSurface,
+                                fontSize = 13.sp
+                            )
+                            Text(
+                                text = "Carlos Manuel de Céspedes · Bayamo",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = AstmColors.OnSurfaceVariant
+                            )
+                        }
+                    }
+                }
+            }
             // ── App info grid ─────────────────────────────────────────────────
             Card(
                 modifier = Modifier.fillMaxWidth(),
@@ -295,7 +387,7 @@ fun AboutScreen(onNavigateBack: () -> Unit) {
 
             // ── Copyright ─────────────────────────────────────────────────────
             Text(
-                text = "© 2025 Annier Jesús Fajardo Quesada · UIC",
+                text = "© 2025 AnesteFlow · Annier J. Fajardo Quesada · UIC",
                 style = MaterialTheme.typography.labelSmall,
                 color = AstmColors.Outline,
                 textAlign = TextAlign.Center

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">AnestesIA</string>
+    <string name="app_name">AnesteFlow</string>
     <string name="notification_channel_silent">anestesia_silent_channel</string>
     <string name="notification_channel_alert">anestesia_alert_channel</string>
 </resources>

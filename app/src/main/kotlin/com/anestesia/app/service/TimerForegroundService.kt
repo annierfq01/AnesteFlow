@@ -207,7 +207,7 @@ class TimerForegroundService : Service() {
         // IMPORTANCE_MIN = no hace sonido, no vibra, aparece al final de la bandeja.
         val silentChannel = NotificationChannel(
             CHANNEL_SILENT,
-            "AnestesIA activo",
+            "AnesteFlow activo",
             NotificationManager.IMPORTANCE_MIN   // ← clave: no molesta
         ).apply {
             description = "Indica que los temporizadores están corriendo"
@@ -244,7 +244,7 @@ class TimerForegroundService : Service() {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
         return NotificationCompat.Builder(this, CHANNEL_SILENT)
-            .setContentTitle("AnestesIA")
+            .setContentTitle("AnesteFlow")
             .setContentText("Temporizadores activos en segundo plano")
             .setSmallIcon(android.R.drawable.ic_dialog_info)
             .setContentIntent(pi)
@@ -283,7 +283,7 @@ class TimerForegroundService : Service() {
     private fun acquireWakeLock() {
         if (wakeLock?.isHeld == true) return
         wakeLock = getSystemService(PowerManager::class.java)
-            .newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "AnestesIA::TimerWakeLock")
+            .newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "AnesteFlow::TimerWakeLock")
             .also { it.acquire(60 * 60 * 1000L) } // máx 1h; se libera en shutdown()
     }
 }

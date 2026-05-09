@@ -1,4 +1,4 @@
-# AnestesIA 💉
+# AnesteFlow 💉
 
 > **Software de Apoyo a la Decisión Clínica para Anestesiología**  
 > Gestión de fármacos, temporizadores persistentes, alertas sonoras y reversión de emergencia.
@@ -109,8 +109,8 @@ El APK se genera en: `app/build/outputs/apk/`
 El workflow `.github/workflows/android.yml` se dispara automáticamente con cada push a `main` o `develop`.
 
 **Artefactos generados:**
-- `AnestesIA-debug-{número}` → APK debug listo para instalar
-- `AnestesIA-release-{número}` → APK release sin firmar
+- `AnesteFlow-debug-{número}` → APK debug listo para instalar
+- `AnesteFlow-release-{número}` → APK release sin firmar
 
 **Para habilitar releases firmados**, agregue los siguientes *Secrets* en el repositorio:
 ```
