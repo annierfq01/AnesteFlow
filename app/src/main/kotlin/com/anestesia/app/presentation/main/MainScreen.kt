@@ -108,7 +108,7 @@ fun MainScreen(
             contentPadding = PaddingValues(
                 start = 16.dp, end = 16.dp,
                 top = padding.calculateTopPadding() + 8.dp,
-                bottom = 96.dp
+                bottom = 140.dp
             ),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
