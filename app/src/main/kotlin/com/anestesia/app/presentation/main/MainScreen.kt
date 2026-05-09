@@ -277,7 +277,6 @@ private fun ActiveTimerCard(
                     style = MaterialTheme.typography.bodySmall,
                     color = AstmColors.OnSurfaceVariant
                 )
-                }
                 when {
                     isCritical -> Text(
                         "⚠️ REQUIERE REINYECCIÓN",

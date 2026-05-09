@@ -10,7 +10,7 @@ import com.anestesia.app.data.local.entity.DrugEntity
 @Database(
     entities = [DrugEntity::class, ActiveTimerEntity::class],
     version = 2,
-    exportSchema = true
+    exportSchema = false
 )
 abstract class AnestesiaDatabase : RoomDatabase() {
     abstract fun drugDao(): DrugDao
