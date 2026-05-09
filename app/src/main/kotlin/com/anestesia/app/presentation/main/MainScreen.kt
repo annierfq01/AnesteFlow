@@ -37,7 +37,8 @@ import kotlin.math.min
 @Composable
 fun MainScreen(
     viewModel: MainViewModel = hiltViewModel(),
-    onNavigateToVademecum: () -> Unit
+    onNavigateToVademecum: () -> Unit,
+    onNavigateToAbout: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val patientWeight by viewModel.patientWeight.collectAsState()
@@ -76,6 +77,10 @@ fun MainScreen(
                     }
                     IconButton(onClick = onNavigateToVademecum) {
                         Icon(Icons.Default.MedicalServices, contentDescription = "Vademécum",
+                            tint = AstmColors.OnSurface)
+                    }
+                    IconButton(onClick = onNavigateToAbout) {
+                        Icon(Icons.Default.Info, contentDescription = "Acerca de",
                             tint = AstmColors.OnSurface)
                     }
                 },

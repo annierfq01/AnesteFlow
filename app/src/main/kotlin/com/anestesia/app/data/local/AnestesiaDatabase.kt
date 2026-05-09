@@ -9,7 +9,7 @@ import com.anestesia.app.data.local.entity.DrugEntity
 
 @Database(
     entities = [DrugEntity::class, ActiveTimerEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = true
 )
 abstract class AnestesiaDatabase : RoomDatabase() {

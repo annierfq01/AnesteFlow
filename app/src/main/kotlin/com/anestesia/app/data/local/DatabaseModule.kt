@@ -2,6 +2,8 @@ package com.anestesia.app.data.local
 
 import android.content.Context
 import androidx.room.Room
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.anestesia.app.data.local.dao.ActiveTimerDao
 import com.anestesia.app.data.local.dao.DrugDao
 import com.anestesia.app.data.repository.*
@@ -17,6 +19,18 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
 
+    /**
+     * Migración 1→2: limpia el vademécum para que el seed actualizado (v2)
+     * se re-inserte con datos clínicos correctos en el siguiente arranque.
+     * Los timers activos se conservan (no se tocan).
+     */
+    private val MIGRATION_1_2 = object : Migration(1, 2) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            // Borrar fármacos del seed antiguo (datos incorrectos)
+            db.execSQL("DELETE FROM drugs")
+        }
+    }
+
     @Provides
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context): AnestesiaDatabase =
@@ -25,7 +39,7 @@ object DatabaseModule {
             AnestesiaDatabase::class.java,
             AnestesiaDatabase.DATABASE_NAME
         )
-            .fallbackToDestructiveMigration()
+            .addMigrations(MIGRATION_1_2)
             .build()
 
     @Provides

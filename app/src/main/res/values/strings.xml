@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">AnestesIA</string>
-    <string name="notification_channel_id">anestesia_timer_channel</string>
-    <string name="notification_channel_name">Temporizadores Activos</string>
-    <string name="notification_channel_desc">Alertas de fármacos en curso</string>
+    <string name="notification_channel_silent">anestesia_silent_channel</string>
+    <string name="notification_channel_alert">anestesia_alert_channel</string>
 </resources>
