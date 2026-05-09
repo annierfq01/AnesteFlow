@@ -26,7 +26,9 @@ fun AnestesiaNavGraph() {
             )
         }
         composable(Routes.VADEMECUM) {
-            VademecumScreen()
+            VademecumScreen(
+                onNavigateBack = { navController.popBackStack() }
+            )
         }
     }
 }

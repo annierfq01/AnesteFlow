@@ -28,6 +28,7 @@ import com.anestesia.app.presentation.theme.drugCategoryColor
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VademecumScreen(
+    onNavigateBack: () -> Unit = {},
     viewModel: VademecumViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -55,6 +56,11 @@ fun VademecumScreen(
             TopAppBar(
                 title = {
                     Text("Vademécum", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                },
+                navigationIcon = {
+                    IconButton(onClick = onNavigateBack) {
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Volver")
+                    }
                 },
                 actions = {
                     IconButton(onClick = { exportLauncher.launch("anestesia_backup.json") }) {
@@ -294,7 +300,7 @@ private fun DrugEditDialog(
                         readOnly = true,
                         label = { Text("Categoría*") },
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expandedCategory) },
-                        modifier = Modifier.menuAnchor().fillMaxWidth()
+                        modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryNotEditable).fillMaxWidth()
                     )
                     ExposedDropdownMenu(
                         expanded = expandedCategory,

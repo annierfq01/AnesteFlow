@@ -3,6 +3,7 @@ package com.anestesia.app.presentation.main
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -14,7 +15,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
@@ -484,7 +484,7 @@ private fun AdministerDialog(
                         DoseRow("Peso paciente", "$weightKg kg")
                         DoseRow("Dosis", "${drug.doseMgKg} mg/kg")
                         DoseRow("Concentración", "${drug.concentrationMgMl} mg/ml")
-                        Divider(modifier = Modifier.padding(vertical = 4.dp))
+                        HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
                         Row(horizontalArrangement = Arrangement.SpaceBetween,
                             modifier = Modifier.fillMaxWidth()) {
                             Text("VOLUMEN A ADMINISTRAR",
