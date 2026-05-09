@@ -91,6 +91,7 @@ app/
 ```bash
 git clone https://github.com/TU_USUARIO/AnestesiaApp.git
 cd AnestesiaApp
+bash bootstrap.sh      # ← descarga gradle-wrapper.jar (solo la primera vez)
 
 # Debug
 ./gradlew assembleDebug

@@ -1,4 +1,4 @@
-# Gradle
+# Gradle - IMPORTANTE: NO ignorar el wrapper jar
 .gradle/
 build/
 !gradle/wrapper/gradle-wrapper.jar
@@ -19,6 +19,3 @@ local.properties
 captures/
 .externalNativeBuild/
 .cxx/
-
-# Kotlin
-*.class

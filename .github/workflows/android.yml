@@ -25,11 +25,58 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
+      - name: Download gradle-wrapper.jar
+        run: |
+          WRAPPER_JAR="gradle/wrapper/gradle-wrapper.jar"
+          WRAPPER_VERSION="8.9"
+          # Download the real jar from Gradle's GitHub releases
+          curl -sL \
+            "https://raw.githubusercontent.com/gradle/gradle/v${WRAPPER_VERSION}.0/gradle/wrapper/gradle-wrapper.jar" \
+            -o "${WRAPPER_JAR}" || true
+
+          # Fallback: use gradle's own bootstrap script
+          if [ ! -s "${WRAPPER_JAR}" ]; then
+            echo "Primary download failed, using bootstrap fallback..."
+            curl -sL "https://services.gradle.org/distributions/gradle-${WRAPPER_VERSION}-bin.zip" \
+              -o /tmp/gradle-dist.zip
+            unzip -j /tmp/gradle-dist.zip \
+              "gradle-${WRAPPER_VERSION}/lib/plugins/gradle-wrapper-${WRAPPER_VERSION}.jar" \
+              -d /tmp/ 2>/dev/null || true
+            # If that path didn't work, try alternate jar path inside the zip
+            if [ ! -s "/tmp/gradle-wrapper-${WRAPPER_VERSION}.jar" ]; then
+              unzip -j /tmp/gradle-dist.zip \
+                "gradle-${WRAPPER_VERSION}/lib/gradle-wrapper-${WRAPPER_VERSION}.jar" \
+                -d /tmp/ 2>/dev/null || true
+            fi
+            # Last resort: extract any jar named gradle-wrapper from the dist
+            if [ ! -s "/tmp/gradle-wrapper-${WRAPPER_VERSION}.jar" ]; then
+              unzip -l /tmp/gradle-dist.zip | grep "gradle-wrapper" | awk '{print $4}' | head -1 | \
+                xargs -I{} unzip -j /tmp/gradle-dist.zip {} -d /tmp/ 2>/dev/null || true
+            fi
+            cp /tmp/gradle-wrapper*.jar "${WRAPPER_JAR}" 2>/dev/null || true
+          fi
+
+          # Verify jar is valid
+          if file "${WRAPPER_JAR}" | grep -q "Zip"; then
+            echo "✓ gradle-wrapper.jar is valid ($(du -h ${WRAPPER_JAR} | cut -f1))"
+          else
+            echo "✗ gradle-wrapper.jar invalid, contents:"
+            cat "${WRAPPER_JAR}"
+            exit 1
+          fi
+
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
+      - name: Cache Gradle packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/libs.versions.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
       - name: Build Debug APK
         run: ./gradlew assembleDebug --no-daemon --stacktrace
